@@ -14,15 +14,17 @@ import java.util.stream.Collectors;
 public class DownloadsController {
 
     @GetMapping("/downloads")
-    public List<String> listDownloads() {
+    public DownloadResponse listDownloads() {
         String home = System.getProperty("user.home");
         File downloadsDir = new File(home, "Downloads");
+        List<String> files;
         if (downloadsDir.exists() && downloadsDir.isDirectory()) {
-            return Arrays.stream(downloadsDir.listFiles())
+            files = Arrays.stream(downloadsDir.listFiles())
                     .map(File::getName)
                     .collect(Collectors.toList());
         } else {
-            return List.of("Downloads directory not found");
+            files = List.of("Downloads directory not found");
         }
+        return new DownloadResponse(files);
     }
 }
